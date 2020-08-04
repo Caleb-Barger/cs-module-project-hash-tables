@@ -21,8 +21,7 @@ class HashTable:
     """
 
     def __init__(self, capacity):
-        # Your code here
-
+        self.data = [None] * capacity 
 
     def get_num_slots(self):
         """
@@ -34,8 +33,7 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
-
+        return len(self.data)
 
     def get_load_factor(self):
         """
@@ -53,8 +51,23 @@ class HashTable:
         Implement this, and/or DJB2.
         """
 
-        # Your code here
+        # starting with an intal offset basis 
+        # iterate thtough each byte to be hashed
+        # set hash to hash * FNV_prime
+        # set hast to hash ^ current byte
+        # finally return the hash
 
+        OFFSET_BASIS = 14695981039346656037
+        FNV_PRIME = 1099511628211
+
+        the_hash = OFFSET_BASIS
+        bts = key.encode()
+
+        for b in bts:
+            the_hash = the_hash ^ b
+            the_hash = the_hash * FNV_PRIME
+
+        return the_hash 
 
     def djb2(self, key):
         """
@@ -63,15 +76,16 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
-
+        pass
 
     def hash_index(self, key):
         """
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        #return self.fnv1(key) % self.capacity
-        return self.djb2(key) % self.capacity
+
+        return self.fnv1(key) % self.capacity
+        #return self.djb2(key) % self.capacity
 
     def put(self, key, value):
         """
@@ -81,7 +95,7 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        self.data[self.hash_index(key)] = value 
 
 
     def delete(self, key):
@@ -92,8 +106,10 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
-
+        if self.data[self.hash_index(key)]:
+            self.data[self.hash_index(key)] = None
+        else:
+            print(f"given key \"{key}\" not found")
 
     def get(self, key):
         """
@@ -103,8 +119,10 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
-
+        if self.data[self.hash_index(key)]:
+            return self.data[self.hash_index(key)]
+        else:
+            return None
 
     def resize(self, new_capacity):
         """
@@ -113,8 +131,13 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        # first i need to get diffrence in 
+        # new capacity vs old capacity
+        # then I can extend the initalized
+        # none indecies based on the calculated diffrence
 
+        # after the data has been extended I can iterate through
+        # the data and call get
 
 
 if __name__ == "__main__":
