@@ -87,7 +87,7 @@ class HashMap:
 
         return None
 
-hm = HashMap(1)
+hm = HashMap(10)
 
 hm.insert("A", "1")
 hm.insert("B", "2")
