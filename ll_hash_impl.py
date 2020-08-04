@@ -16,7 +16,7 @@ class Node:
 
 # HashMap implementation here
 class HashMap:
-    def __init__(self, inital_size=40):
+    def __init__(self, inital_size=20):
         # self.data = [new Node()] * inital_size
         self.item_count = 0
         self.data = [None] * inital_size
@@ -41,7 +41,6 @@ class HashMap:
         return the_hash % self.get_length() # returns the insertion index
 
     def _load_OK(self):
-        print(self.item_count/len(self.data))
         if (self.item_count/len(self.data) > 0.7):
             return False
         return True
@@ -58,53 +57,75 @@ class HashMap:
         # if there are currently more nodes to traverse 
         while cur.next_node is not None:
             # than we want to step through until we reach the last node
-            # prev = cur
             cur = cur.next_node
         
         # if there was more than one node transversed than
         if not cur.next_node and cur.key:
-            # prev.next_node = cur
-            # cur.key = key
-            # cur.value = value
+
+            if cur.key == key:
+                cur.value = value
+                return
+
+            self.item_count += 1
             cur.next_node = Node(key, value)
         
         # otherwise this is the first node being stored
         else:
+            self.item_count += 1
             cur.key = key
             cur.value = value
 
     def lookup(self, key):
+        # get the index of the key
         index = self._hash_FNV1a(key)
-
-        while not self.data[index].get_next():
-            if key == self.data[index].get_key():
-                return self.data[index].get_value()
-            else:
-                index += 1
         
-        if self.data[index].get_key() == key:
-            return self.data[index].get_value()
+        # store a refrence to the current node
+        cur = self.data[index]
+
+        # check if the cur node's key matches
+        if cur.key == key:
+            # if it does return its value
+            return cur.value
+
+        # otherwise check if there are other nodes
+        while cur.next_node:
+            # if there are assign the cur node to the next node
+            cur = cur.next_node
+            if cur.key == key:
+                return cur.value
 
         return None
 
-hm = HashMap(10)
+    def __str__(self):
+        rs = ""
+        for n in self.data:
+            rs += n.__str__() + "\n"
+        return rs
 
-hm.insert("A", "1")
-hm.insert("B", "2")
-hm.insert("C", "3")
-hm.insert("D", "4")
-hm.insert("E", "5")
-hm.insert("F", "6")
-hm.insert("G", "7")
-hm.insert("H", "8")
-hm.insert("I", "9")
-hm.insert("J", "10")
+hm = HashMap(5)
 
+hm.insert("caleb", 18)
+hm.insert("jameie", 46) # will overwrite the node
+hm.insert("kevin", 47)
+hm.insert("cam", 16)
+hm.insert("caryss", 12)
+hm.insert("dan", 18)
+hm.insert("jim", 46) # will overwrite the node
+hm.insert("jemmmy", 47)
+hm.insert("sarahs", 16)
+hm.insert("trey", 12)
+hm.insert("Kyle", 18)
+hm.insert("Nathan", 46) # will overwrite the node
+hm.insert("Quinn", "HALL")
+hm.insert("Etahn", 16)
+hm.insert("Farkis", 12)
 
-print(hm._load_OK())
+print(f"LOAD FACTOR OK - {hm._load_OK()}")
 
-for s in hm.data:
-    print(s)
+print(hm.lookup("Quinn")) # should now be 46
+
+print(hm)
+
 
 
 
