@@ -6,7 +6,7 @@ frequent_ordering = [
             'B', 'M', 'Y', 'C', 'P', 
             'K', 'V', 'Q', 'J', 'X', 
             'Z'
-        ]
+]
 
 char_count = {}
 
@@ -49,7 +49,3 @@ for c in data:
     r += c
 
 print(r)
-
-
-
-
